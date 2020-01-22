@@ -6,24 +6,30 @@ const app = express();
 app.use(morgan('dev'));
 
 app.get('/apps', (req, res)=>{
-  const {sort} = req.query;
+  const {sort, genres} = req.query;
 
   if(sort) {
     if(!['Rating', 'App'].includes(sort)) {
       return res.status(400).send('Sort must one of \"Rating\" or \"App\"')
     }
   }
-  // let results = Playstore.filter(item=>
-  //   item.App.toLowerCase()
-  // )
+
+  if(genres) {
+    if(!['Action', 'Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'].includes(genres)) {
+      return res.status(400).send('Genres must be one of Action, Puzzle, Strategy, Casual, Arcade, or Card')
+    }
+  }
+
+  let results = Playstore.filter(item =>item.Genres.includes(genres));
+  
 
   if(sort){
-    Playstore.sort((a, b)=>{
+    results.sort((a, b)=>{
     return a[sort]>b[sort] ? 1 : a[sort]<b[sort] ? -1 : 0;
   })
 }
 
-  res.send(Playstore);
+  res.send(results);
 })
 
 app.listen(8000, ()=>{
