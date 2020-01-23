@@ -12,26 +12,28 @@ app.get('/apps', (req, res)=>{
     if(!['Rating', 'App'].includes(sort)) {
       return res.status(400).send('Sort must one of \"Rating\" or \"App\"')
     }
+
   }
 
   if(genres) {
     if(!['Action', 'Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'].includes(genres)) {
       return res.status(400).send('Genres must be one of Action, Puzzle, Strategy, Casual, Arcade, or Card')
     }
+    else {
+      results = Playstore.filter(item => item.Genres.includes(genres))
+    }
   }
-
-  let results = Playstore.filter(item =>item.Genres.includes(genres));
-  
 
   if(sort){
     results.sort((a, b)=>{
-    return a[sort]>b[sort] ? 1 : a[sort]<b[sort] ? -1 : 0;
-  })
-}
+      return a[sort] > b[sort] ? 1 : a[sort] < b[sort] ? -1 : 0;
+    })
+  }
 
   res.send(results);
 })
 
 app.listen(8000, ()=>{
   console.log('Server running on PORT 8000')
+  console.log('I\'m gonna give it my all!')
 ;})
