@@ -8,6 +8,8 @@ app.use(morgan('dev'));
 app.get('/apps', (req, res)=>{
   const {sort, genres} = req.query;
 
+  let results = [...Playstore]
+
   if(sort) {
     if(!['Rating', 'App'].includes(sort)) {
       return res.status(400).send('Sort must one of \"Rating\" or \"App\"')
@@ -33,7 +35,4 @@ app.get('/apps', (req, res)=>{
   res.send(results);
 })
 
-app.listen(8000, ()=>{
-  console.log('Server running on PORT 8000')
-  console.log('I\'m gonna give it my all!')
-;})
+module.exports = app
